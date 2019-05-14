@@ -29,16 +29,15 @@ myReadData<-function(){
 myCreatePNG<-function(){
    #Limits to just Baltimore City
 	 NEI<<-subset(NEI,fips=="24510")
-	 #myYLim=c(c(0,500),c(0,500),c(0,100),c(0,300))
+	 	 
+	 
+	 png("plot3.png", width=480, height=480)
 	 g<-ggplot(NEI,aes(year, Emissions))
-	 #g<-g+facet_wrap(aes(type),scales="free")+coord_cartesian(ylim=c(0,300))
-	 g<-g+facet_wrap(aes(type),scales="free")+coord_cartesian(ylim=myYLim)
+	 g<-g+facet_wrap(aes(type),scales="free")+coord_cartesian(ylim=c(0,400))
 	 g<-g+geom_point()
 	 g<-g+geom_smooth(method="lm")
 	 print(g)
-	 #png("plot3.png", width=480, height=480)
-	 #put the chart in here before you are done
-	 #dev.off()
+	 dev.off()
 }
 
 
@@ -46,5 +45,5 @@ myCreatePNG<-function(){
 
 #Run these scripts
 #mySetup()
-#myReadData()
+myReadData()
 myCreatePNG()
