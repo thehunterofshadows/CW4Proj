@@ -3,6 +3,7 @@
 #install.packages("dplyr")
 #install.packages("purrr")
 library(dplyr)
+library(ggplot2)
 options(scipen=999)
 #This is how you load the file in regular R 
 #source("filename")
@@ -26,17 +27,13 @@ myReadData<-function(){
 
 
 myCreatePNG<-function(){
-	#must use base library
+   #Limits to just Baltimore City
 	 NEI<<-subset(NEI,fips=="24510")
-	 myNEI<<-summarise(group_by(NEI, year),Emissions=sum(Emissions))
+	 g<-ggplot(NEI,aes(year, Emissions))
+	 g<-g+facet_wrap(aes(type))+geom_point()+geom_smooth(method="lm")
 	 
 	 png("plot3.png", width=480, height=480)
-	 plot(myNEI,type="l",log="x")
-	 points(myNEI,pch=19)
-	 model<-lm(year~Emissions, NEI)
-	 #model<-with(myNEI,(Emissions~year))
-	 #print(model)
-	 abline(model,lwd=2,col="red")
+	 qplot(year, Emissions, data=NEI, facets=type~.)
 	 dev.off()
 }
 
