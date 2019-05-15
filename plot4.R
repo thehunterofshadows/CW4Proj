@@ -38,12 +38,12 @@ myCreatePNG<-function(){
 
 	 	 
 	 
-	 #png("plot4.png", width=480, height=480)
+	 png("plot4.png", width=480, height=480)
 	 g<-ggplot(myCombS,aes(year, Emissions))
 	 g<-g+geom_point()
 	 g<-g+geom_smooth(method="lm")
 	 print(g)
-	 #dev.off()
+	 dev.off()
 }
 
 
