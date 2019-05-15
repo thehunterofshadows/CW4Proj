@@ -13,6 +13,8 @@ options(scipen=999)
 
 #What you will need to do
 #Combine 
+#Across the United States, how have emissions from 
+#coal combustion-related sources changed from 1999–2008?
 
 mySetup<-function(){
 	temp<-tempfile()
@@ -23,21 +25,25 @@ mySetup<-function(){
 myReadData<-function(){
 	NEI<<-readRDS("summarySCC_PM25.rds")
 	SCC<<-readRDS("Source_Classification_Code.rds")
+	myFull<<-merge(NEI, SCC,by="SCC",all=TRUE)
 }
 
+myPrepData<-function(){
+  myComb<<-myFull[grep("(comb).*(coal)",myFull$Short.Name, ignore.case=TRUE),]
+  myCombS<<-summarise(group_by(myComb, year),Emissions=sum(Emissions))
+  View(myComb)
+}
 
 myCreatePNG<-function(){
-   #Limits to just Baltimore City
-	 NEI<<-subset(NEI,fips=="24510")
+
 	 	 
 	 
-	 png("plot3.png", width=480, height=480)
-	 g<-ggplot(NEI,aes(year, Emissions))
-	 g<-g+facet_wrap(aes(type),scales="free")+coord_cartesian(ylim=c(0,400))
+	 #png("plot4.png", width=480, height=480)
+	 g<-ggplot(myCombS,aes(year, Emissions))
 	 g<-g+geom_point()
 	 g<-g+geom_smooth(method="lm")
 	 print(g)
-	 dev.off()
+	 #dev.off()
 }
 
 
@@ -45,5 +51,6 @@ myCreatePNG<-function(){
 
 #Run these scripts
 #mySetup()
-myReadData()
+#myReadData()
+myPrepData()
 myCreatePNG()
