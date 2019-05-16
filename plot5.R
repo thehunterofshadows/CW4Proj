@@ -1,7 +1,7 @@
 #code for week 4 project
 #librarys
-#install.packages("dplyr")
-#install.packages("purrr")
+install.packages("dplyr")
+install.packages("purrr")
 library(dplyr)
 library(ggplot2)
 options(scipen=999)
@@ -30,21 +30,22 @@ myReadData<-function(){
 
 myPrepData<-function(){
   #filter for Vehicle
-  myComb<<-myFull[grep("(comb).*(coal)",myFull$Short.Name, ignore.case=TRUE),]
+  myComb<<-myFull[grep("vehicle",myFull$SCC.Level.Two, ignore.case=TRUE),]
+  myComb<<-subset(myComb,fips=="24510")
   myCombS<<-summarise(group_by(myComb, year),Emissions=sum(Emissions))
-  View(myComb)
+  #View(myComb)
 }
 
 myCreatePNG<-function(){
 
 	 	 
 	 
-	 #png("plot5.png", width=480, height=480)
+	 png("plot5.png", width=480, height=480)
 	 g<-ggplot(myCombS,aes(year, Emissions))
 	 g<-g+geom_point()
 	 g<-g+geom_smooth(method="lm")
 	 print(g)
-	 #dev.off()
+	 dev.off()
 }
 
 
